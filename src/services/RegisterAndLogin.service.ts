@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import CustomError from '../helpers/CustomError';
-import IregisterService from '../interfaces/IregisterService.interface';
+import IregisterService from '../interfaces/IregisterAndLoginService.interface';
 import { Ibycript, Ijwt } from '../interfaces/auth.interfaces';
 
-export default class RegisterService implements IregisterService {
+export default class RegisterAndLoginService implements IregisterService {
   protected model: PrismaClient;
   private jwt: Ijwt;
   private bcrypt: Ibycript;
@@ -27,6 +27,14 @@ export default class RegisterService implements IregisterService {
         accountid: accountCreate.id,
       },
     });
+    return this.jwt.createToken(username);
+  }
+
+  async login(username: string, password: string): Promise<string> {
+    const user = await this.model.users.findUnique({ where: { username } });
+    if (!user) throw new CustomError('Usuário não encontrado', 404);
+    const passwordVerify = await this.bcrypt.comparePassword(password, user.password);
+    if (!passwordVerify) throw new CustomError('Senha incorreta', 401);
     return this.jwt.createToken(username);
   }
 }

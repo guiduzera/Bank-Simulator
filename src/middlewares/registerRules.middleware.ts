@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import registerZodSchema from '../helpers/registerZodSchema';
 import CustomError from '../helpers/CustomError';
 
-const registerRules = (req: Request, _res: Response, next: NextFunction) => {
+const registerRules = (req: Request, _res: Response, next: NextFunction): void => {
   try {
     const { username, password } = req.body;
     const numberVerify = password

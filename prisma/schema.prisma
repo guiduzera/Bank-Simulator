@@ -15,12 +15,12 @@ model Users {
   username     String   @unique @db.VarChar(255)
   password   String
   accountid  Int
-  Accounts  Accounts  @relation(fields: [accountid], references: [id])  
+  accounts  Accounts  @relation(fields: [accountid], references: [id])  
 }
 
 model Accounts {
   id        Int      @id @default(autoincrement())
-  balance  Int
+  balance  Decimal  @db.Decimal(9,2) 
   Users    Users[]
   debitedAccount Transactions[] @relation("debitedAccount")
   creditedAccount Transactions[] @relation("creditedAccount")  

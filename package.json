@@ -4,13 +4,11 @@
   "description": "",
   "main": "./build/index.js",
   "scripts": {
-    "build": "npx -y tsc",
     "start": "npm run build && node .",
+    "build": "npx -y tsc",
     "dev": "tsnd src/index.ts",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "test": "jest -i --forceExit --verbose",
-    "test:dev": "mocha -r ts-node/register src/tests/unit/**/*.test.ts --exit -t 60000",
-    "test:coverage": "nyc npm run test:dev"
+    "test:dev": "mocha -r ts-node/register src/tests/**/*.test.ts --exit -t 60000"
   },
   "keywords": [],
   "author": "",

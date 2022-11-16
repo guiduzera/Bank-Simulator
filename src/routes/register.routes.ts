@@ -4,6 +4,7 @@ import prisma from '../client';
 import RegisterController from '../controllers/Register.controllers';
 import RegisterService from '../services/Register.service';
 import Bcrypt from '../helpers/bcrypt';
+import registerRules from '../middlewares/registerRules.middleware';
 
 const registerRouter = Router();
 
@@ -17,6 +18,6 @@ const registerService = new RegisterService(model, jwt, bcrypt);
 
 const controllers = new RegisterController(registerService);
 
-registerRouter.post('/', controllers.register);
+registerRouter.post('/', registerRules, controllers.register);
 
 export default registerRouter;

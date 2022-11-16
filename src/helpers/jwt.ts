@@ -3,8 +3,8 @@ import { Ijwt } from '../interfaces/auth.interfaces';
 import CustomError from './CustomError';
 
 export default class JWT implements Ijwt {
-  _secret = process.env.JWT_SECRET || 'secret';
-  _options: Record<string, string> = { expiresIn: '24h', algorithm: 'HS256' };
+  private _secret = process.env.JWT_SECRET || 'secret';
+  private _options: Record<string, string> = { expiresIn: '24h', algorithm: 'HS256' };
 
   public createToken(payload: string): string {
     const token = sign({ data: payload }, this._secret, this._options);

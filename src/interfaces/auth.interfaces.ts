@@ -1,6 +1,4 @@
 export interface Ijwt {
-  _secret: string,
-  _options: Record<string, string>,
   createToken(payload: string): string,
   verifyToken(token: string): string,
 }

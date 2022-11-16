@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import registerZodSchema from '../helpers/registerZodSchema';
 import CustomError from '../helpers/CustomError';
 import IregisterService from '../interfaces/IregisterService.interface';
 import { Ibycript, Ijwt } from '../interfaces/auth.interfaces';
@@ -15,10 +14,6 @@ export default class RegisterService implements IregisterService {
   }
 
   async register(username: string, password: string): Promise<string> {
-    const parsed = registerZodSchema.safeParse({ username, password });
-    if (!parsed.success) {
-      throw new CustomError(parsed.error.message, 400);
-    }
     const user = await this.model.users.findUnique({ where: { username } });
     if (user) throw new CustomError('Nome de usuário já existente', 400);
     const accountCreate = await this.model.accounts.create({

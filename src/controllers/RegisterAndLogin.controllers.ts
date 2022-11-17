@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import IregisterService from '../interfaces/IregisterAndLoginService.interface';
 
 export default class RegisterController {
-  service: IregisterService;
+  private service: IregisterService;
   constructor(service: IregisterService) {
     this.service = service;
     this.register = this.register.bind(this);

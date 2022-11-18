@@ -1,32 +1,68 @@
 version: '3.9'
+# versao do docker-compose
 services:
-  backend:
+  frontend:
     image: node:16.14
-    container_name: app_backend
-    build: ./
+    build: ./frontend
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
     tty: true
     stdin_open: true
     command: bash
     restart: always
+    depends_on:
+      - backend
+  # nome do serviço
+  backend:
+    image: node:16.14
+    # imagem do Node
+    container_name: app_backend
+    # nome do container
+    build: ./backend
+    # local da build da imagem
+    tty: true
+    # habilita o tty
+    stdin_open: true
+    # habilita o stdin
+    command: bash
+    # comando a ser executado
+    restart: always
+    # reinicia o container sempre que ele parar
     working_dir: /app
+    # diretorio de trabalho
     volumes:
-      - ./:/app
+      - ./backend:/app
+      # mapeia o diretorio local para o diretorio de trabalho
     ports:
       - 3001:3001
+      # mapeia a porta 3001 do container para a porta 3001 do host
     platform: linux/x86_64
+    # plataforma do container
     depends_on:
       - db
+      # dependencia do container db
     environment:
+      # variaveis de ambiente
       - DATABASE_URL=postgres://postgres:password@db:5432/ng_cash?schema=public
       - APP_PORT=3001
       - JWT_SECRET=jwt_secret
   db:
+    # nome do serviço
     image: postgres:13
+    # imagem do postgres
     container_name: db
+    # nome do container
     volumes:
       - ./:/app
+      # mapeia o diretorio local para o diretorio de trabalho
     ports:
       - 5432:5432
+      # mapeia a porta 5432 do container para a porta 5432 do host
     environment:
+      # variaveis de ambiente
       - POSTGRES_PASSWORD=password
     restart: 'always'
+    # reinicia o container sempre que ele parar

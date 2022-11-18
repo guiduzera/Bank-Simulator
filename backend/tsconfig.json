@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+      "target": "esnext",
+      "module": "commonjs",
+      "sourceMap": true,                     
+      "outDir": "./build",
+      "rootDir": "backend/src",
+      "strict": true,
+      "moduleResolution": "node",
+      "baseUrl": ".", 
+      "forceConsistentCasingInFileNames": true,
+      "resolveJsonModule": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "strictPropertyInitialization": false,
+      "skipLibCheck": true,
+      "lib": ["esnext"],
+      "esModuleInterop": true,
+      "paths": {
+        "*": ["node_modules/*"]
+      }
+    },
+    "include": ["backend/src/**/*"],
+    "exclude": ["backend/src/tests"]
+}

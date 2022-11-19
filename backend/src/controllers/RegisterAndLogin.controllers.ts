@@ -8,6 +8,7 @@ export default class RegisterController {
     // recebe o um service como parâmetro que implementa a interface IregisterService
     this.register = this.register.bind(this);
     this.login = this.login.bind(this);
+    this.getUser = this.getUser.bind(this);
     // faz o bind do this para que o this sempre seja a classe
     // se utilizar arrow function não precisa fazer o bind
   }
@@ -29,6 +30,17 @@ export default class RegisterController {
       const { username, password } = req.body;
       const login = await this.service.login(username, password);
       return res.status(200).json({ token: login });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // função para puxar um usuário pelo id
+  async getUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+    try {
+      const { id } = req.params;
+      const user = await this.service.getUser(Number(id));
+      return res.status(200).json({ user });
     } catch (error) {
       next(error);
     }

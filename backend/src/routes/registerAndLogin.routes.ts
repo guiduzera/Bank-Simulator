@@ -22,4 +22,7 @@ registerAndLoginRouter.post('/register', registerRules, controllers.register);
 
 registerAndLoginRouter.post('/login', controllers.login);
 
+// rota criada por mim para aprimorar o front-end
+registerAndLoginRouter.get('/users/:id', controllers.getUser);
+
 export default registerAndLoginRouter;

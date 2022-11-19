@@ -59,4 +59,14 @@ export default class RegisterAndLoginService implements IregisterService {
     return this.jwt.createToken(username);
     // se a senha for igual, retorna um token
   }
+
+  // função para puxar um usuário pelo id
+  async getUser(id: number): Promise<string> {
+    const user = await this.model.users.findUnique({ where: { id } });
+    // procura o usuário no banco
+    if (!user) throw new CustomError('Usuário não encontrado', 404);
+    // se não encontrar o usuário, retorna um erro
+    return user.username;
+    // se encontrar o usuário, retorna o username
+  }
 }

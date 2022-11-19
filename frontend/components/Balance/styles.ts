@@ -75,3 +75,33 @@ export const TextContainer = styled.section`
     }
   }
 `;
+
+export const TransactionsContainer = styled.div`
+    display: flex;
+    transition: all .3s;
+    gap: 1rem;
+    margin-left: 5rem;
+    margin-bottom: 2rem;
+    input {
+      width: 15rem;
+      color: ${({ theme }) => theme.primary};
+      font-size: 1rem;
+      font-weight: 300;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      background: ${({ theme }) => theme.gradient};
+  }
+  input::placeholder {
+      color: ${({ theme }) => theme.primary};
+  }
+  button {
+    font-size: 1rem;
+    font-weight: 600;
+    color: ${({ theme }) => theme.background};
+    background: ${({ theme }) => theme.primary};
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.4rem 1rem;
+  }
+`;

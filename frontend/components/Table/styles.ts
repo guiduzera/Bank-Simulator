@@ -65,7 +65,6 @@ export const FilterContainer = styled.div`
         color: currentColor;
         border: 1px solid ${({ theme }) => theme.background};
         border-radius: 50%;
-        transform: translateY(-0.075em);
         display: grid;
         place-content: center;
         width: 0.9rem;

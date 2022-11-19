@@ -56,10 +56,13 @@ export default class TransactionControllers {
   ): Promise<Response | void> => {
     try {
       const { username } = req;
-      const { query } = req.query;
+      const { query } = req.query as { query: string };
+      if (!query) throw new Error('Query não encontrada');
+      const queryAdapter = query.split('?');
       const transactions = await this.transactionService.findTransactionByQuery(
         username as string,
-        query as string,
+        queryAdapter[0],
+        queryAdapter[1],
       );
       return res.status(200).json({ transactions });
     } catch (error) {

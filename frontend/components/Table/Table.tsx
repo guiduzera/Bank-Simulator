@@ -12,13 +12,12 @@ interface Transaction {
 }
 
 interface TableProps {
-    filteredTransactions: Transaction[];
+  filteredTransactions: Transaction[];
 }
 
 export default function Table({ filteredTransactions }: TableProps) {
   const [transactions, setTransactions] = useState([]);
-  const [creditedUser, setCreditedUser] = useState("");
-  const [debitedUser, setDebitedUser] = useState("");
+  const [transactionsUsers, setTransactionsUsers] = useState([] as string[][]);
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (!user) {
@@ -36,16 +35,17 @@ export default function Table({ filteredTransactions }: TableProps) {
         );
         setTransactions(transactions.data.transactions);
       } catch (e) {
-        Router.push("/");
+        console.log(e);
       }
     };
     getTransactions();
   }, []);
   useEffect(() => {
     const getUsers = async () => {
+      const transactionsToUse = filteredTransactions.length === 0 ? transactions : filteredTransactions;
       try {
         const getUsers = await Promise.all(
-          transactions.map(
+          transactionsToUse.map(
             async (transaction: Transaction): Promise<string[]> => {
               const creditedUser = await axios.get(
                 `http://localhost:3001/users/${transaction.creditedAccountId}`
@@ -57,17 +57,13 @@ export default function Table({ filteredTransactions }: TableProps) {
             }
           )
         );
-        getUsers.map((user) => {
-          setCreditedUser(user[0]);
-          setDebitedUser(user[1]);
-        });
+        setTransactionsUsers(getUsers);
       } catch (e) {
-        Router.push("/");
+        console.log(e);
       }
     };
     getUsers();
-  }, [transactions]);
-  console.log(filteredTransactions);
+  }, [transactions, filteredTransactions]);
   const transactionsToUse = filteredTransactions.length === 0 ? transactions : filteredTransactions;
   return (
     <div>
@@ -76,7 +72,7 @@ export default function Table({ filteredTransactions }: TableProps) {
           <tr>
             <th>#</th>
             <th>conta creditada</th>
-            <th>recebeu de</th>
+            <th>conta debitada</th>
             <th>valor</th>
             <th>data</th>
           </tr>
@@ -86,14 +82,21 @@ export default function Table({ filteredTransactions }: TableProps) {
             let valueAdapted
             if (transaction.value.indexOf(".") === -1) {
               valueAdapted = `${transaction.value},00`;
+            } else if (transaction.value.indexOf(".") === transaction.value.length - 2) {
+              valueAdapted = `${transaction.value.split(".").join(",")}0`;
             } else {
-                valueAdapted = transaction.value.split(".").join(",");
+              valueAdapted = transaction.value.split(".").join(",");
             }
+            // if para segurar a asincronidade
+            if(!transactionsUsers[index]) {
+              return;
+            }
+            const users = transactionsUsers[index];
             return (
               <tr key={index}>
                 <td>{transaction.id}</td>
-                <td>{creditedUser}</td>
-                <td>{debitedUser}</td>
+                <td>{users[0]}</td>
+                <td>{users[1]}</td>
                 <td>{valueAdapted}</td>
                 <td>{transaction.createdAt}</td>
               </tr>

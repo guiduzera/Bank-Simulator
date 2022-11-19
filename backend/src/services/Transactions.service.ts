@@ -14,7 +14,7 @@ export default class TransactionsService implements ITransactionsService {
   /// --------- /////
   // forma que eu encontrei para fazer a normalização da data
   private date = new Date();
-  private dia = String(this.date.getDate() - 1).padStart(2, '0');
+  private dia = String(this.date.getDate()).padStart(2, '0');
   private mes = String(this.date.getMonth() + 1).padStart(2, '0');
   private ano = this.date.getFullYear();
   /// --------- /////
@@ -103,7 +103,7 @@ export default class TransactionsService implements ITransactionsService {
   };
 
   // função que filtra as transações de acordo com a data, cash-out ou cash-in do usuário
-  findTransactionByQuery = async (username: string, query: string): Promise<unknown> => {
+  findTransactionByQuery = async (username: string, query: string, complement: string): Promise<unknown> => {
     const findUser = await this.model.users.findUnique({ where: { username } });
     // procura o usuário no banco
     if (!findUser) throw new Error(this.notFound);
@@ -121,9 +121,29 @@ export default class TransactionsService implements ITransactionsService {
       });
       return findTransactions;
     }
+    // se a query for de data e cash-in
+    if (query !== 'cash-in' && query !== 'cash-out' && complement === 'cash-in') {
+      const result = await this.model.transactions.findMany({
+        where: {
+          AND: [{ createdAt: query }, { creditedAccountId: findUser.accountid }],
+        },
+      });
+      return result
+    }
+    // se a query for de data e cash-out
+    if (query !== 'cash-in' && query !== 'cash-out' && complement === 'cash-out') {
+      const result = await this.model.transactions.findMany({
+        where: {
+          AND: [{ createdAt: query }, { debitedAccountId: findUser.accountid }],
+        },
+      });
+      return result
+    }
     // se a query for cash-out, retorna todas as transações que o usuário fez
     const findByDate = await this.model.transactions.findMany({
-      where: { createdAt: query },
+      where: {
+        AND: [{ createdAt: query }, { OR: [{ debitedAccountId: findUser.accountid }, { creditedAccountId: findUser.accountid }] }],
+      }
     });
     // se a query for uma data, retorna todas as transações feitas naquela data
     return findByDate;

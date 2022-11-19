@@ -20,14 +20,32 @@ export default function FilterWithTable() {
       });
     }
     try {
+      if (date === '' && type === '') {
+        toast.error('Você precisa preencher pelo menos um campo', {
+          style: {
+            background: theme.error,
+            color: '#fff'
+          }
+        });
+      }
       if (date === '') {
         const trasactions = await axios.get(`http://localhost:3001/transaction/search?query=${type}`, {
           headers: {
             Authorization: JSON.parse(localStorage.getItem("user") as string).token,
           }
         });
-        setFilterTransactions(trasactions.data.transactions);
         setType('');
+        return setFilterTransactions(trasactions.data.transactions);
+      }
+      if (date !== '' && type !== '') {
+        const trasactions = await axios.get(`http://localhost:3001/transaction/search?query=${date}?${type}`, {
+          headers: {
+            Authorization: JSON.parse(localStorage.getItem("user") as string).token,
+          }
+        });
+        setDate('');
+        setType('');
+        return setFilterTransactions(trasactions.data.transactions);
       }
       const dateTransactions = await axios.get(`http://localhost:3001/transaction/search?query=${date}`, {
         headers: {
@@ -43,7 +61,6 @@ export default function FilterWithTable() {
           color: "#fff"
         }
       });
-      Router.push("/");
     }
   };
   return (
@@ -80,6 +97,7 @@ export default function FilterWithTable() {
           />
         </label>
         <button type="button" onClick={handleClick}>Filtrar</button>
+        <button type="button" onClick={() => setFilterTransactions([])}>Limpar filtros</button>
       </FilterContainer>
       <Table filteredTransactions={filterTransactions} />
     </Container>

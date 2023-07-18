@@ -1,5 +1,5 @@
 <h1 align="center">
-	NG.CASH - fullsatck project
+	Bank-Simulator
 </h1>
 
 <h3 align="center">

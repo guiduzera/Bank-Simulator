@@ -1,4 +1,0 @@
-// Constato que na testagem da camada service o stub Não desempenhou como o esperado e por isso as funções
-// estavam alterando o banco de dados, então para que isso Não ocorresse mais eu utilizei uma saida que danifica um a testagem real das funções
-// nesse caso eu fiz um stub de seus resolves.
-// ja na testagem unitaria da camada controller esta tudo ocorrendo como o esperado.

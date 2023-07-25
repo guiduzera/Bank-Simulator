@@ -35,8 +35,7 @@ export default function Form() {
       Router.push('/home');
     } catch (e) {
       // @ts-ignore
-      const { error } = e;
-      toast.error(error, {
+      toast.error(e, {
         style: {
           background: theme.error,
           color: '#fff'

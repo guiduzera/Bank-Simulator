@@ -25,7 +25,7 @@ export default function Form() {
 
     try {
       const loginRequest = await bankApi('post', '/login', { username, password }, '');
-      localStorage.setItem('user', JSON.stringify({token: loginRequest.data.token, username}));
+      localStorage.setItem('user', JSON.stringify({token: loginRequest.token, username}));
       toast.success('Login realizado com sucesso!', {
         style: {
           background: '#1E1E',

@@ -45,12 +45,12 @@ export default function Table({ filteredTransactions }: TableProps) {
         const getUsers = await Promise.all(
           transactionsToUse.map(
             async (transaction: Transaction): Promise<string[]> => {
-              const creditedUser = await axios.get(`${PROTOCOL}://${HOST}/user/${transaction.creditedAccountId}`, {
+              const creditedUser = await axios.get(`${PROTOCOL}://${HOST}/users/${transaction.creditedAccountId}`, {
                 headers: {
                   Authorization: JSON.parse(localStorage.getItem("user") as string).token,
                 },
               });
-              const debitedUser = await axios.get(`${PROTOCOL}://${HOST}/user/${transaction.debitedAccountId}`, {
+              const debitedUser = await axios.get(`${PROTOCOL}://${HOST}/users/${transaction.debitedAccountId}`, {
                 headers: {
                   Authorization: JSON.parse(localStorage.getItem("user") as string).token,
                 },

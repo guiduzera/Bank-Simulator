@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3001;
 const port = Number(PORT);
 
 const server = app.listen(port, '0.0.0.0', () => console.log(
-  `Server is running on PORT: ${PORT}`,
+  `server is running on PORT: ${PORT}`,
 ));
 // inicia o servidor na porta definida
 

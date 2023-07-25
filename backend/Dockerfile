@@ -18,5 +18,7 @@ RUN npm install
 # Copia os arquivos do projeto
 COPY . .
 
+RUN npm run migrate:compose
+
 # Comando que será executado quando o container for iniciado
-CMD [ "npx", "prisma", "generate", "&&", "npm", "run", "dev" ]
+CMD ["npm", "run", "dev" ]

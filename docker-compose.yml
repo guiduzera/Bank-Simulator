@@ -1,6 +1,9 @@
 version: '3.9'
 services:
   frontend:
+    networks:
+      - default
+    container_name: app_frontend
     build: ./frontend
     ports:
       - 3000:3000
@@ -16,11 +19,16 @@ services:
       timeout: 10s
       retries: 5
   backend:
+    networks:
+      - ng_cash
+    working_dir: /app-backend
     container_name: app_backend
     build: ./backend
     ports:
       - 3001:3001
     platform: linux/x86_64
+    volumes:
+      - ./backend:/app-backend
     depends_on:
       db:
         condition: service_healthy
@@ -30,11 +38,13 @@ services:
       retries: 5
     environment:
       # variaveis de ambiente
-      - DATABASE_URL=postgres://postgres:password@db:5432/ng_cash?schema=public
+      - DATABASE_URL=postgres://postgres:password@database:5432/ng_cash?schema=public
       - APP_PORT=3001
       - JWT_SECRET=jwt_secret
   db:
     platform: linux/x86_64
+    networks:
+      - ng_cash
     healthcheck:
       test:  ["CMD", "pg_isready", "-U", "postgres"]
       timeout: 10s
@@ -44,7 +54,7 @@ services:
     # nome do serviço
     image: postgres:13
     # imagem do postgres
-    container_name: db
+    container_name: database
     # nome do container
     volumes:
       - ./:/app
@@ -55,5 +65,11 @@ services:
     environment:
       # variaveis de ambiente
       - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=ng_cash
     restart: 'always'
     # reinicia o container sempre que ele parar
+
+networks:
+  ng_cash:
+    name: ng_cash

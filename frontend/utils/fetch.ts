@@ -21,6 +21,7 @@ const bankApi = async (method: string, endpoint: string, body = {}, localStorage
         url: endpoint,
         data: body,
     }).then((response) => {
+        console.log(response);
         return response;
     });
 }

@@ -5,7 +5,8 @@ import theme from '../../styles/theme';
 import { FormContainer, Input } from './styles';
 import { GiWallet } from 'react-icons/gi';
 import Router from 'next/router';
-import bankApi from '../../utils/fetch';
+import axios from 'axios';
+import { HOST, PROTOCOL } from '../../utils/fetch';
 
 export default function FormRegister() {
   const [username, setUsername] = useState('');
@@ -25,7 +26,7 @@ export default function FormRegister() {
     }
 
     try {
-      const registerRequest = await bankApi('post', '/register', { username, password }, '');
+      const registerRequest = await axios.post(`${PROTOCOL}://${HOST}/register`, { username, password });
       localStorage.setItem('user', JSON.stringify({token: registerRequest.data.token, username}));
       toast.success('cadastro realizado com sucesso!', {
         style: {

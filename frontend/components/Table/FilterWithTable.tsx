@@ -3,7 +3,8 @@ import { Container, FilterContainer } from "./styles";
 import Table from "./Table";
 import toast from "react-hot-toast";
 import theme from "../../styles/theme";
-import bankApi from "../../utils/fetch";
+import axios from "axios";
+import { HOST, PROTOCOL } from "../../utils/fetch";
 
 export default function FilterWithTable() {
   const [filterTransactions, setFilterTransactions] = useState([]);
@@ -28,17 +29,29 @@ export default function FilterWithTable() {
         });
       }
       if (date === '') {
-        const trasactions = await bankApi('get', `/transaction/search?query=${type}`, {}, localStorage.getItem("user"));
+        const trasactions = await axios.get(`${PROTOCOL}://${HOST}/transaction/search?query=${type}`, {
+          headers: {
+            Authorization: JSON.parse(localStorage.getItem("user") as string).token,
+          }
+        });
         setType('');
         return setFilterTransactions(trasactions.data.transactions);
       }
       if (date !== '' && type !== '') {
-        const trasactions = await bankApi('get', `/transaction/search?query=${date}?${type}`, {}, localStorage.getItem("user"));
+        const trasactions = await axios.get(`${PROTOCOL}://${HOST}/transaction/search?query=${date}?${type}`, {
+          headers: {
+            Authorization: JSON.parse(localStorage.getItem("user") as string).token,
+          }
+        });
         setDate('');
         setType('');
         return setFilterTransactions(trasactions.data.transactions);
       }
-      const dateTransactions = await bankApi('get', `/transaction/search?query=${date}`, {}, localStorage.getItem("user"));
+      const dateTransactions = await axios.get(`${PROTOCOL}://${HOST}/transaction/search?query=${date}`, {
+        headers: {
+          Authorization: JSON.parse(localStorage.getItem("user") as string).token,
+        }
+      });
       setFilterTransactions(dateTransactions.data.transactions);
       setDate('');
     } catch (e) {

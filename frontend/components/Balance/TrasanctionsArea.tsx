@@ -3,7 +3,8 @@ import { TransactionsContainer } from './styles'
 import Router from 'next/router';
 import toast from 'react-hot-toast';
 import theme from '../../styles/theme';
-import bankApi from '../../utils/fetch';
+import axios from 'axios';
+import { HOST, PROTOCOL } from '../../utils/fetch';
 
 export default function TrasanctionsArea() {
     const [transactionName, setTransactionName] = useState('');
@@ -15,7 +16,14 @@ export default function TrasanctionsArea() {
             if (!user) {
                 Router.push('/');
             }
-            await bankApi('patch', '/transaction', { destinyUser: transactionName, value: trueValor }, user);
+            await axios.patch(`${PROTOCOL}://${HOST}/transaction`, {
+                destinyUser: transactionName,
+                value: trueValor,
+            }, {
+                headers: {
+                    Authorization: JSON.parse(user as string).token,
+                },
+            });
             setTransactionName('');
             setTransactionValue('Valor da transação: R$ ');
             toast.success('Transferência realizada com sucesso', {

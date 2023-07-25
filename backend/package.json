@@ -7,7 +7,7 @@
     "start": "npm run build && node .",
     "build": "npx -y tsc",
     "dev": "tsnd src/index.ts",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "keywords": [],
   "author": "",

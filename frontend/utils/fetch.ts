@@ -20,7 +20,9 @@ const bankApi = async (method: string, endpoint: string, body = {}, localStorage
         method,
         url: endpoint,
         data: body,
-    }).then(({ status, data }) => ({ status, data }));
+    }).then((response) => {
+        return response;
+    });
 }
 
 export default bankApi;

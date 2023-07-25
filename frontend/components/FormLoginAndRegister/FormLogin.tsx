@@ -1,10 +1,10 @@
 import { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import theme from '../../styles/theme';
-import axios from 'axios';
-import { FormContainer, Input, Container } from './styles';
+import { FormContainer, Input } from './styles';
 import { GiWallet } from 'react-icons/gi';
 import Router from 'next/router';
+import bankApi from '../../utils/fetch';
 
 export default function Form() {
   const [username, setUsername] = useState('');
@@ -24,7 +24,7 @@ export default function Form() {
     }
 
     try {
-      const loginRequest = await axios.post('http://localhost:3001/login', { username, password });
+      const loginRequest = await bankApi('post', '/login', { username, password }, '');
       localStorage.setItem('user', JSON.stringify({token: loginRequest.data.token, username}));
       toast.success('Login realizado com sucesso!', {
         style: {

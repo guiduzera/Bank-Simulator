@@ -1,10 +1,10 @@
 import Router from "next/router";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import theme from "../../styles/theme";
 import { Container, TextContainer } from "./styles";
 import TrasanctionsArea from "./TrasanctionsArea";
+import bankApi from "../../utils/fetch";
 
 export default function Balance() {
   const [username, setUsername] = useState("");
@@ -23,11 +23,7 @@ export default function Balance() {
     }
     const getBalance = async () => {
       try {
-        const balance = await axios.get("http://localhost:3001/balance", {
-          headers: {
-            Authorization: JSON.parse(user as string).token,
-          },
-        });
+        const balance = await bankApi("get", "/balance", {}, user);
         let valueAdapted;
         if (balance.data.balance.indexOf(".") === -1) {
           valueAdapted = `${balance.data.balance},00`;

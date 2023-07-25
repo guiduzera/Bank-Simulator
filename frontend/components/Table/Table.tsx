@@ -1,7 +1,7 @@
 import Router from "next/router";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { TableContainer } from "./styles";
+import bankApi from "../../utils/fetch";
 
 interface Transaction {
   id: string;
@@ -25,14 +25,7 @@ export default function Table({ filteredTransactions }: TableProps) {
     }
     const getTransactions = async () => {
       try {
-        const transactions = await axios.get(
-          "http://localhost:3001/transaction/all",
-          {
-            headers: {
-              Authorization: JSON.parse(user as string).token,
-            },
-          }
-        );
+        const transactions = await bankApi("get", "/transaction/all", {}, user);
         setTransactions(transactions.data.transactions);
       } catch (e) {
         console.log(e);
@@ -47,12 +40,8 @@ export default function Table({ filteredTransactions }: TableProps) {
         const getUsers = await Promise.all(
           transactionsToUse.map(
             async (transaction: Transaction): Promise<string[]> => {
-              const creditedUser = await axios.get(
-                `http://localhost:3001/users/${transaction.creditedAccountId}`
-              );
-              const debitedUser = await axios.get(
-                `http://localhost:3001/users/${transaction.debitedAccountId}`
-              );
+              const creditedUser = await bankApi("get", `/user/${transaction.creditedAccountId}`, {}, localStorage.getItem("user"));
+              const debitedUser = await bankApi("get", `/user/${transaction.debitedAccountId}`, {}, localStorage.getItem("user"));
               return [creditedUser.data.user, debitedUser.data.user];
             }
           )

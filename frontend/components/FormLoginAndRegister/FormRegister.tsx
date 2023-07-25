@@ -2,10 +2,10 @@
 import { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import theme from '../../styles/theme';
-import axios from 'axios';
-import { FormContainer, Input, Container } from './styles';
+import { FormContainer, Input } from './styles';
 import { GiWallet } from 'react-icons/gi';
 import Router from 'next/router';
+import bankApi from '../../utils/fetch';
 
 export default function FormRegister() {
   const [username, setUsername] = useState('');
@@ -25,7 +25,7 @@ export default function FormRegister() {
     }
 
     try {
-      const registerRequest = await axios.post('http://localhost:3001/register', { username, password });
+      const registerRequest = await bankApi('post', '/register', { username, password }, '');
       localStorage.setItem('user', JSON.stringify({token: registerRequest.data.token, username}));
       toast.success('cadastro realizado com sucesso!', {
         style: {

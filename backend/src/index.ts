@@ -3,10 +3,12 @@ import 'dotenv/config';
 import app from './app';
 // importa a aplicação
 
-const PORT = process.env.APP_PORT || 3001;
+const PORT = process.env.PORT || 3001;
 // define a porta que a aplicação vai rodar pegando a variável de ambiente APP_PORT ou 3001 caso não exista
 
-const server = app.listen(PORT, () => console.log(
+const port = Number(PORT);
+
+const server = app.listen(port, '0.0.0.0', () => console.log(
   `Server is running on PORT: ${PORT}`,
 ));
 // inicia o servidor na porta definida
